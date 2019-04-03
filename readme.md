@@ -291,7 +291,7 @@ Een element wat hier deze functie volgt ziet er als volgt uit
 ["div": String, "inner html": String]
 ```
 
-## ids en classes
+## Ids en Classes
 De volgende stap was om de ids en classes van een element te pakken te krijgen. Hiervoor heb ik de volgende functie geschreven:
 ```scala
   private def extractProperties(element: Any, attr: String): Array[String] = {
@@ -317,4 +317,57 @@ Na het chainen van deze functies heb ik de html omgezet naar een datastructuur w
 
 ## Elementen zoeken
 
-Voor deze toepassing moet ik alle ```<a>``` tags hebben met als class ```title```. Dit doe ik als volgt
+Voor deze toepassing moet ik alle ```<a>``` tags hebben met als class ```title```. Dit doe ik als volgt:
+
+```scala
+ parseHTML( loadPage(url))
+      .filter(element => hasClass(element.asInstanceOf[Array[Any]], "title"))
+      .filter(element => hasSelector(element.asInstanceOf[Array[Any]], "a"))
+```
+
+De geparsde HTML filter ik met behulp van de ```hasClass``` en de ```hasSelector``` functie. Nu ik dit zo lees zie ik dat het ```hasTag``` had moeten en zijn en geen ```hasSelector```(ik geef ICSS maar de schuld). Met behulp van deze functies kan je dus een willekeurige pagina "query-en" om zo de elementen op te vragen die je wilt hebben. Nu ik dus toegang had tot de data die ik wilde printen was het tijd om het parallel uit te laten voeren. Dit zou geen probleem moeten zijn omdat alle data immutable is. 
+
+## Parallel
+
+Dit is alle code die nodig was om het parallel te maken
+```scala
+def getPageSizeConcurrently(): Unit = {
+    val caller = self
+
+    for(page <- pages) {
+      actor { caller ! (page, RedditPostCounter.printTitleWordCount(page)) }
+    }
+  }
+```
+
+Ik heb hier een for-loop waarin ik voor iedere page (een string naar de locatie van de pagina) een actor aanroep met als message type de page en als functie de ```printTitleWordCount(page)```. Ik hoef in dit geval niets te receiven dus dit is alle code die nodig was. En tot mijn verbazing werkte het ook nog. 
+
+Ik heb gebruik gemaakt van de timer methode uit het boek om zo bij te houden hoe lang de functie uitvoer duurt. Ik heb dit gedaan voor de sequentiele versie en voor de concurrent versie.
+```
+Method took 2.137646959 seconds.
+Method took 0.043542566 seconds.
+```
+Zo te zien is de parallele uitvoering vele malen sneller, mooi!
+
+Terugblik
+======
+
+Ik heb de laatste paar dagen veel leuke nieuwe dingen geleerd. Hiervoor wist ik niet goed wat FP nou precies betekende en was ik "bang" om hier mee te beginnen. Omdat Scala zowel aspecten van OO als FP heeft gaf het mij een vertrouwde omgeving om te experimenteren met FP. 
+
+Tijdens het programmeren van de eindopdracht (wat mij een goede twee dagen heeft gekost) kwam ik steeds meer in de flow van het FP. Zo vind ik de uiteindelijke code er ook heel mooi uitzien
+
+```scala
+getRedditPostTitles(url)
+      .mkString(" ")
+      .split(" ")
+      .map(s => removeString(s, "\r"))
+      .map(s => removeString(s, "\n"))
+      .map(s => removeString(s, "-"))
+      .map(s => removeString(s, "/"))
+      .filter(s => s != "")
+```
+Allemaal functies aan elkaar gechained, overzichtelijk en modulair. Ik denk dat ik FP vaker ga toepassen bij toepassingen waar ik een hele reeks bewerkingen moet toepassen op een dataset. Ik ga dan wel gebruik maken van mijn eigen datastructures, dit heb ik nu niet gedaan om mij te focussen op het FP.
+
+Tot nu toe heb ik programma's geschreven die acties asynchroon/parallel uitvoeren in Java en C# (ook Javascript maar dit is niet echt parallel). Daar ging het in mijn geval altijd stroef of ik merkte niet veel verbetering in de snelheid. Toen ik het in Scala deed was het bijna geen werk en leverde het een enorme verbetering in performance op. 
+
+Mijn ervaring met Scala is dus zeer positief en ik wil nu eigenlijk meer leren over het functionele programmeren!

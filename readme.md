@@ -1,7 +1,7 @@
 Begin
 ======
 ## Motivatie
-Ik heb gekozen om mij de komende dagen te verdiepen in Scala. Scala is een programmeer taal die support biedt voor zowel OO als FP (functional programming). Deze taal sprak mij aan omdat hij deze twee technieken combineert. Zo kan ik rustig aan kennis maken met FP in een omgeving waarin ik al bekend ben, het OO paradigma. Dit kennis maken ga ik doen aan de hand van de het boek Seven Languages in Seven Days (TODO). Dit boek biedt uitleg over de taal met een aantal opdrachten die je zelf moet maken. Deze opdrachten leiden uiteindelijk tot mijn eindopdracht waarin ik de opgedane kennis ga toepassen. 
+Ik heb gekozen om mij de komende dagen te verdiepen in Scala. Scala is een programmeer taal die support biedt voor zowel OO als FP (functional programming). Deze taal sprak mij aan omdat hij deze twee technieken combineert. Zo kan ik rustig aan kennis maken met FP in een omgeving waarin ik al bekend ben, het OO paradigma. Dit kennis maken ga ik doen aan de hand van de het boek Seven Languages in Seven Days. Dit boek biedt uitleg over de taal met een aantal opdrachten die je zelf moet maken. Deze opdrachten leiden uiteindelijk tot mijn eindopdracht waarin ik de opgedane kennis ga toepassen. 
 
 Als eindopdracht heb ik besloten om een reddit scraper te maken. Dit programma accepteert een reeks subreddits die hij parallel gaat scrapen om zo te tellen welke woorden hoevaak gebruikt worden. Dit lijkt mij een leuke opdracht omdat ik het idee heb dat subreddits een beetje in hun eigen "bubble" zitten en dat posts vaak hetzelfde taalgebruik hebben.
 
